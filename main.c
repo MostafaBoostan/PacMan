@@ -3,30 +3,15 @@
 #include <conio.h> // baraye tabe getch va kbhit
 #include <stdlib.h> // baraye tabe malloc estefade kardam
 #include <string.h>
-
-//tarif tamam rang ha baraye estefade dar barname
-#define RED     "\x1b[31m"
-#define GREEN   "\x1b[32m"
-#define YELLOW  "\x1b[33m"
-#define BLUE    "\x1b[34m"
-#define MAGENTA "\x1b[35m"
-#define RESET   "\x1b[0m"
-
-struct user{
-    int user_id;
-    char user_name[200];
-    char password[200];
-    int level;
-    int last_game;
-    struct user *pnext;
-};
+#include "game.h"
 
 struct user* load_user();
 void first_menu(struct user*);
 void sign_in(struct user*);
 struct user* sign_up(struct user*);
-void user_menu(struct user*, struct user*);
 void delete_acc(struct user*, struct user*);
+void load_map_new(struct user*, struct user*);
+void load_map_restore(struct user*, struct user*);
 
 int main(){
     struct user *phead;
@@ -272,7 +257,7 @@ void user_menu(struct user* ptemp, struct user* phead){
 
     switch(choise){
         case 1:
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+            load_map_new(ptemp, phead);
             break;
         case 2:
             if(ptemp->last_game == 0){
@@ -281,7 +266,7 @@ void user_menu(struct user* ptemp, struct user* phead){
                 usleep(3000000);
                 user_menu(ptemp, phead);
             }
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+            load_map_restore(ptemp, phead);
             break;
         case 3:
             system("cls || clear");
@@ -332,3 +317,89 @@ void delete_acc(struct user* pdelete, struct user* phead){
     first_menu(phead);
 }
 
+//load kardan map baraye new game
+void load_map_new(struct user* ptemp, struct user* phead){
+    struct game new_game;
+    int choise, i, j;
+    FILE *map_file;
+    system("cls || clear");
+    printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
+    printf(YELLOW"*"RESET"    "MAGENTA"Choose your game level"RESET"   "YELLOW"*"RESET"\n");
+    printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
+    printf(YELLOW"*"RESET"             "GREEN"Easy (1"RESET"         "YELLOW"*"RESET"\n");
+    printf(YELLOW"*"RESET"           "GREEN"Medium (2"RESET"         "YELLOW"*"RESET"\n");
+    printf(YELLOW"*"RESET"             "GREEN"Hard (3"RESET"         "YELLOW"*"RESET"\n");
+    printf(YELLOW"*"RESET"             "GREEN"Back (4"RESET"         "YELLOW"*"RESET"\n");
+    printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
+    printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
+    printf(BLUE"Please enter your choise: "RESET);
+    scanf("%d",& choise);
+    switch(choise){
+        case 1:
+            map_file = fopen("PAC-MAN-MAPS\\mapA.txt", "r");
+            break;
+        case 2:
+            map_file = fopen("PAC-MAN-MAPS\\mapB.txt", "r");
+            break;
+        case 3:
+            map_file = fopen("PAC-MAN-MAPS\\mapC.txt", "r");
+            break;
+        case 4:
+            user_menu(ptemp, phead);
+            break;
+        default:
+            system("cls || clear");
+            printf("\n"RED"The entered number is not valid. Please enter one of the options correctly."RESET);
+            usleep(3000000);
+            load_map_new(ptemp, phead);
+    }
+    new_game.user_id = ptemp->user_id;
+    new_game.score = 0;
+    fscanf(map_file, "%d %d",& new_game.line,& new_game.column);
+    new_game.map = (char **) malloc(new_game.line * sizeof(char*));
+    for(i = 0; i < new_game.line; i++){
+        fscanf(map_file,"\n");
+        new_game.map[i] = (char*) malloc(new_game.column * sizeof(char));
+        for(j = 0; j < new_game.column; j++){
+            fscanf(map_file, "%c",& new_game.map[i][j]);
+            new_game.map[i][j] -= '0';
+        }
+    }
+    fclose(map_file);
+    start_game(ptemp, phead, new_game);
+}
+
+//load kardan map baraye restore
+void load_map_restore(struct user* ptemp, struct user* phead){
+    struct game restore_game;
+    // temp va mghloob baraye tabdil add id be character hast ke sakhte beshe baraye esm file
+    int i , j, temp, maghloob = 0;
+    char file_id[200];
+    temp = ptemp->user_id;
+    while(temp){
+        maghloob = maghloob * 10 + temp % 10;
+        temp = temp / 10;
+    }
+    temp = 0;
+    while(maghloob){
+        file_id[temp] = maghloob % 10 + '0';
+        maghloob = maghloob / 10;
+    }
+    FILE *map_file;
+    map_file = fopen(file_id, "r");
+
+    restore_game.user_id = ptemp->user_id;
+    fscanf(map_file, "%d %d",& restore_game.line,& restore_game.column);
+    restore_game.map = (char **) malloc(restore_game.line * sizeof(char*));
+    for(i = 0; i < restore_game.line; i++){
+        fscanf(map_file,"\n");
+        restore_game.map[i] = (char*) malloc(restore_game.column * sizeof(char));
+        for(j = 0; j < restore_game.column; j++){
+            fscanf(map_file, "%c",& restore_game.map[i][j]);
+            restore_game.map[i][j] -= '0';
+        }
+    }
+    fscanf(map_file,"\n%d",& restore_game.score);
+    fclose(map_file);
+    start_game(ptemp, phead, restore_game);
+}

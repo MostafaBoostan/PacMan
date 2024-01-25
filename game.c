@@ -95,6 +95,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    ptemp->last_game = 0;
                                     for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                         fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                     }
@@ -136,6 +137,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    ptemp->last_game = 0;
                                     for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                         fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                     }
@@ -177,6 +179,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    ptemp->last_game = 0;
                                     for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                         fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                     }
@@ -218,6 +221,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    ptemp->last_game = 0;
                                     for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                         fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                     }
@@ -282,6 +286,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                         case GHOST:
                         case GHOST_MOVED:
                             ptemp->level --;
+                            ptemp->last_game = 0;
                             for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                 fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                             }
@@ -301,6 +306,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                             information_game.score ++;
                             if(information_game.score == pill_number){
                                 ptemp->level += 3;
+                                ptemp->last_game = 0;
                                 for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                     fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                 }
@@ -321,6 +327,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                         case GHOST:
                         case GHOST_MOVED:
                             ptemp->level --;
+                            ptemp->last_game = 0;
                             for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                 fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                             }
@@ -340,6 +347,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                             information_game.score ++;
                             if(information_game.score == pill_number){
                                 ptemp->level += 3;
+                                ptemp->last_game = 0;
                                 for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                     fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                 }
@@ -360,6 +368,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                         case GHOST:
                         case GHOST_MOVED:
                             ptemp->level --;
+                            ptemp->last_game = 0;
                             for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                 fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                             }
@@ -379,6 +388,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                             information_game.score ++;
                             if(information_game.score == pill_number){
                                 ptemp->level += 3;
+                                ptemp->last_game = 0;
                                 for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                     fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                 }
@@ -399,6 +409,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                         case GHOST:
                         case GHOST_MOVED:
                             ptemp->level --;
+                            ptemp->last_game = 0;
                             for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                 fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                             }
@@ -418,6 +429,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                             information_game.score ++;
                             if(information_game.score == pill_number){
                                 ptemp->level += 3;
+                                ptemp->last_game = 0;
                                 for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                                     fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                                 }

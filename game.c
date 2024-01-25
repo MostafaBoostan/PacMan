@@ -10,6 +10,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
     struct user* ptemp_write;
     FILE *map_file, *user_file;
     char choise;
+    int choise2;
     int i, j, *random_move_ghost, ghost_number = 0 , *flag, temp, pill_number = 0, pac_man_flag = 1; // flag baraye in bekar rafe ke agar roohi roye ghors bere ghors az bey nare ve betoonim dobare baresh gardoonim
     char file_name[200];
     
@@ -79,7 +80,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
             }
         }
         printf(BLUE"\n\nClick the Escape button to exit.");
-        usleep(1000000);
+        usleep(100000);
         ghost_number = temp;
         for(i = 0; i < information_game.line; i++){
             for(j = 0; j < information_game.column; j++){
@@ -444,30 +445,56 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                 }
             }
             else if(choise == 27){
-
-                //tolid esm file
-                strcpy(file_name, ptemp->user_name);
-                strcat(file_name, ".txt");
-    
-                map_file = fopen(file_name, "w");
-                fprintf(map_file, "%d %d", information_game.line, information_game.column);
-                for(i = 0; i < information_game.line; i++){
-                    fprintf(map_file,"\n");
-                    for(j = 0; j < information_game.column; j++){
-                        fprintf(map_file, "%d", information_game.map[i][j]);
-                    }
-                }
-                fprintf(map_file, "\n%d", information_game.score);
-                fclose(map_file);
-                ptemp->last_game = 1;
-                for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
-                    fwrite(ptemp_write, sizeof(struct user), 1, user_file);
-                }
-                fclose(user_file);
                 system("cls || clear");
-                printf(GREEN"Your game has been successfully saved."RESET);  
-                usleep(3000000);
-                user_menu(ptemp, phead);
+                printf(MAGENTA"Would you like to save your map and continue the current game in the future?"RESET"\n");
+                printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
+                printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
+                printf(YELLOW"*"RESET"              "GREEN"Yes (1"RESET"         "YELLOW"*"RESET"\n");
+                printf(YELLOW"*"RESET"               "GREEN"No (2"RESET"         "YELLOW"*"RESET"\n");
+                printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
+                printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
+                printf(BLUE"Please enter your choise: "RESET);
+                scanf("%d",& choise2);
+                
+                switch(choise2){
+                    case 1:
+                        //tolid esm file
+                        strcpy(file_name, ptemp->user_name);
+                        strcat(file_name, ".txt");
+            
+                        map_file = fopen(file_name, "w");
+                        fprintf(map_file, "%d %d", information_game.line, information_game.column);
+                        for(i = 0; i < information_game.line; i++){
+                            fprintf(map_file,"\n");
+                            for(j = 0; j < information_game.column; j++){
+                                fprintf(map_file, "%d", information_game.map[i][j]);
+                            }
+                        }
+                        fprintf(map_file, "\n%d", information_game.score);
+                        fclose(map_file);
+                        ptemp->last_game = 1;
+                        for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                            fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                        }
+                        fclose(user_file);
+                        system("cls || clear");
+                        printf(GREEN"Your game has been successfully saved."RESET);  
+                        usleep(3000000);
+                        user_menu(ptemp, phead);
+                        break;
+                    case 2:
+                        ptemp->last_game = 0;
+                        for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                            fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                        }
+                        fclose(user_file);
+                        user_menu(ptemp, phead);
+                        break;
+                    default:
+                        system("cls || clear");
+                        printf("\n"RED"The entered number is not valid. Please enter one of the options correctly."RESET);
+                        usleep(3000000);
+                }
             }
         }
     }

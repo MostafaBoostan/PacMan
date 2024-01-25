@@ -4,12 +4,17 @@
 #include <unistd.h> // baraye tabe sleep va usleep
 #include <time.h> //baraye tabe random estefade mishavad
 #include <stdlib.h> // baraye tabe malloc estefade kardam
-
+#include <string.h>
 
 void start_game(struct user* ptemp, struct user* phead, struct game information_game){
-    
+    struct user* ptemp_write;
+    FILE *map_file, *user_file;
     char choise;
     int i, j, *random_move_ghost, ghost_number = 0 , *flag, temp, pill_number = 0, pac_man_flag = 1; // flag baraye in bekar rafe ke agar roohi roye ghors bere ghors az bey nare ve betoonim dobare baresh gardoonim
+    char file_name[200];
+    
+    user_file = fopen("user.bin", "wb");
+
     // baraye harkat rooh ha
     for(i = 0; i < information_game.line; i++){
         for(j = 0; j < information_game.column; j++){
@@ -73,6 +78,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                 }
             }
         }
+        printf(BLUE"\n\nClick the Escape button to exit.");
         usleep(1000000);
         ghost_number = temp;
         for(i = 0; i < information_game.line; i++){
@@ -89,6 +95,10 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
                                     system("cls || clear");
                                     printf(RED"game over."RESET);  
                                     usleep(3000000);
@@ -126,6 +136,10 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
                                     system("cls || clear");
                                     printf(RED"game over."RESET);  
                                     usleep(3000000);
@@ -163,6 +177,10 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
                                     system("cls || clear");
                                     printf(RED"game over."RESET);  
                                     usleep(3000000);
@@ -200,6 +218,10 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                     break;
                                 case PAC_MAN:
                                     ptemp->level --;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
                                     system("cls || clear");
                                     printf(RED"game over."RESET);  
                                     usleep(3000000);
@@ -250,129 +272,190 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
         i--;
         if(_kbhit()){
             choise = getch();
-            if(choise == 's'){ //DOWN
-                switch(information_game.map[i+1][j]){
-                    case HORIZONTAL_WALL:
-                    case VERTICAL_WALL:
-                        break;
-                    case GHOST:
-                    case GHOST_MOVED:
-                        ptemp->level --;
-                        system("cls || clear");
-                        printf(RED"game over."RESET);  
-                        usleep(3000000);
-                        user_menu(ptemp, phead); 
-                        break;
-                    case EMPTY:
-                        information_game.map[i+1][j] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        break;
-                    case PILL:
-                        information_game.map[i+1][j] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        information_game.score ++;
-                        if(information_game.score == pill_number){
-                            ptemp->level += 3;
+            if(choise == -32){ // dekme vizhe niaze yani ba zadan jahat aval -32 vared mishe ke test kardam addadesho badesh jahat
+                choise = getch();
+                if(choise == 80){ //DOWN
+                    switch(information_game.map[i+1][j]){
+                        case HORIZONTAL_WALL:
+                        case VERTICAL_WALL:
+                            break;
+                        case GHOST:
+                        case GHOST_MOVED:
+                            ptemp->level --;
+                            for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                            }
+                            fclose(user_file);
                             system("cls || clear");
-                            printf(GREEN"game is win."RESET);  
+                            printf(RED"game over."RESET);  
                             usleep(3000000);
                             user_menu(ptemp, phead); 
-                        }
-                        break;
+                            break;
+                        case EMPTY:
+                            information_game.map[i+1][j] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            break;
+                        case PILL:
+                            information_game.map[i+1][j] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            information_game.score ++;
+                            if(information_game.score == pill_number){
+                                ptemp->level += 3;
+                                for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                    fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                }
+                                fclose(user_file);
+                                system("cls || clear");
+                                printf(GREEN"game is win."RESET);  
+                                usleep(3000000);
+                                user_menu(ptemp, phead); 
+                            }
+                            break;
+                    }
+                }
+                else if(choise == 72){ //UP
+                    switch(information_game.map[i-1][j]){
+                        case HORIZONTAL_WALL:
+                        case VERTICAL_WALL:
+                            break;
+                        case GHOST:
+                        case GHOST_MOVED:
+                            ptemp->level --;
+                            for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                            }
+                            fclose(user_file);
+                            system("cls || clear");
+                            printf(RED"game over."RESET);  
+                            usleep(3000000);
+                            user_menu(ptemp, phead); 
+                            break;
+                        case EMPTY:
+                            information_game.map[i-1][j] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            break;
+                        case PILL:
+                            information_game.map[i-1][j] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            information_game.score ++;
+                            if(information_game.score == pill_number){
+                                ptemp->level += 3;
+                                for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                    fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                }
+                                fclose(user_file);
+                                system("cls || clear");
+                                printf(GREEN"game is win."RESET);  
+                                usleep(3000000);
+                                user_menu(ptemp, phead); 
+                            }
+                            break;
+                    }
+                }
+                else if(choise == 75){ //LEFT
+                    switch(information_game.map[i][j-1]){
+                        case HORIZONTAL_WALL:
+                        case VERTICAL_WALL:
+                            break;
+                        case GHOST:
+                        case GHOST_MOVED:
+                            ptemp->level --;
+                            for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                            }
+                            fclose(user_file);
+                            system("cls || clear");
+                            printf(RED"game over."RESET);  
+                            usleep(3000000);
+                            user_menu(ptemp, phead); 
+                            break;
+                        case EMPTY:
+                            information_game.map[i][j-1] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            break;
+                        case PILL:
+                            information_game.map[i][j-1] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            information_game.score ++;
+                            if(information_game.score == pill_number){
+                                ptemp->level += 3;
+                                for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                    fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                }
+                                fclose(user_file);
+                                system("cls || clear");
+                                printf(GREEN"game is win."RESET);  
+                                usleep(3000000);
+                                user_menu(ptemp, phead); 
+                            }
+                            break;
+                    }
+                }
+                else if(choise == 77){ //RIGHT
+                    switch(information_game.map[i][j+1]){
+                        case HORIZONTAL_WALL:
+                        case VERTICAL_WALL:
+                            break;
+                        case GHOST:
+                        case GHOST_MOVED:
+                            ptemp->level --;
+                            for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                            }
+                            fclose(user_file);
+                            system("cls || clear");
+                            printf(RED"game over."RESET);  
+                            usleep(3000000);
+                            user_menu(ptemp, phead); 
+                            break;
+                        case EMPTY:
+                            information_game.map[i][j+1] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            break;
+                        case PILL:
+                            information_game.map[i][j+1] = PAC_MAN;
+                            information_game.map[i][j] = EMPTY;
+                            information_game.score ++;
+                            if(information_game.score == pill_number){
+                                ptemp->level += 3;
+                                for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                    fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                }
+                                fclose(user_file);
+                                system("cls || clear");
+                                printf(GREEN"game is win."RESET);  
+                                usleep(3000000);
+                                user_menu(ptemp, phead); 
+                            }
+                            break;
+                    }
                 }
             }
-            else if(choise == 'w'){ //UP
-                switch(information_game.map[i-1][j]){
-                    case HORIZONTAL_WALL:
-                    case VERTICAL_WALL:
-                        break;
-                    case GHOST:
-                    case GHOST_MOVED:
-                        ptemp->level --;
-                        system("cls || clear");
-                        printf(RED"game over."RESET);  
-                        usleep(3000000);
-                        user_menu(ptemp, phead); 
-                        break;
-                    case EMPTY:
-                        information_game.map[i-1][j] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        break;
-                    case PILL:
-                        information_game.map[i-1][j] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        information_game.score ++;
-                        if(information_game.score == pill_number){
-                            ptemp->level += 3;
-                            system("cls || clear");
-                            printf(GREEN"game is win."RESET);  
-                            usleep(3000000);
-                            user_menu(ptemp, phead); 
-                        }
-                        break;
+            else if(choise == 27){
+
+                //tolid esm file
+                strcpy(file_name, ptemp->user_name);
+                strcat(file_name, ".txt");
+    
+                map_file = fopen(file_name, "w");
+                fprintf(map_file, "%d %d", information_game.line, information_game.column);
+                for(i = 0; i < information_game.line; i++){
+                    fprintf(map_file,"\n");
+                    for(j = 0; j < information_game.column; j++){
+                        fprintf(map_file, "%d", information_game.map[i][j]);
+                    }
                 }
-            }
-            else if(choise == 'a'){ //LEFT
-                switch(information_game.map[i][j-1]){
-                    case HORIZONTAL_WALL:
-                    case VERTICAL_WALL:
-                        break;
-                    case GHOST:
-                    case GHOST_MOVED:
-                        ptemp->level --;
-                        system("cls || clear");
-                        printf(RED"game over."RESET);  
-                        usleep(3000000);
-                        user_menu(ptemp, phead); 
-                        break;
-                    case EMPTY:
-                        information_game.map[i][j-1] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        break;
-                    case PILL:
-                        information_game.map[i][j-1] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        information_game.score ++;
-                        if(information_game.score == pill_number){
-                            ptemp->level += 3;
-                            system("cls || clear");
-                            printf(GREEN"game is win."RESET);  
-                            usleep(3000000);
-                            user_menu(ptemp, phead); 
-                        }
-                        break;
+                fprintf(map_file, "\n%d", information_game.score);
+                fclose(map_file);
+                ptemp->last_game = 1;
+                for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                    fwrite(ptemp_write, sizeof(struct user), 1, user_file);
                 }
-            }
-            else if(choise == 'd'){ //RIGHT
-                switch(information_game.map[i][j+1]){
-                    case HORIZONTAL_WALL:
-                    case VERTICAL_WALL:
-                        break;
-                    case GHOST:
-                    case GHOST_MOVED:
-                        ptemp->level --;
-                        system("cls || clear");
-                        printf(RED"game over."RESET);  
-                        usleep(3000000);
-                        user_menu(ptemp, phead); 
-                        break;
-                    case EMPTY:
-                        information_game.map[i][j+1] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        break;
-                    case PILL:
-                        information_game.map[i][j+1] = PAC_MAN;
-                        information_game.map[i][j] = EMPTY;
-                        information_game.score ++;
-                        if(information_game.score == pill_number){
-                            ptemp->level += 3;
-                            system("cls || clear");
-                            printf(GREEN"game is win."RESET);  
-                            usleep(3000000);
-                            user_menu(ptemp, phead); 
-                        }
-                        break;
-                }
+                fclose(user_file);
+                system("cls || clear");
+                printf(GREEN"Your game has been successfully saved."RESET);  
+                usleep(3000000);
+                user_menu(ptemp, phead);
             }
         }
     }

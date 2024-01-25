@@ -257,6 +257,7 @@ void user_menu(struct user* ptemp, struct user* phead){
 
     switch(choise){
         case 1:
+            ptemp->last_game = 0;
             load_map_new(ptemp, phead);
             break;
         case 2:
@@ -373,20 +374,15 @@ void load_map_new(struct user* ptemp, struct user* phead){
 void load_map_restore(struct user* ptemp, struct user* phead){
     struct game restore_game;
     // temp va mghloob baraye tabdil add id be character hast ke sakhte beshe baraye esm file
-    int i , j, temp, maghloob = 0;
-    char file_id[200];
-    temp = ptemp->user_id;
-    while(temp){
-        maghloob = maghloob * 10 + temp % 10;
-        temp = temp / 10;
-    }
-    temp = 0;
-    while(maghloob){
-        file_id[temp] = maghloob % 10 + '0';
-        maghloob = maghloob / 10;
-    }
+    int i , j;
+    char file_name[200];
     FILE *map_file;
-    map_file = fopen(file_id, "r");
+
+    //tolid esm file
+    strcpy(file_name, ptemp->user_name);
+    strcat(file_name, ".txt");
+
+    map_file = fopen(file_name, "r");
 
     restore_game.user_id = ptemp->user_id;
     fscanf(map_file, "%d %d",& restore_game.line,& restore_game.column);

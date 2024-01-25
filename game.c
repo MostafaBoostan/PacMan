@@ -8,7 +8,9 @@
 
 void start_game(struct user* ptemp, struct user* phead, struct game information_game){
     
-    int i, j, *random_move_ghost, ghost_number = 0 , *flag, temp; // flag baraye in bekar rafe ke agar roohi roye ghors bere ghors az bey nare ve betoonim dobare baresh gardoonim
+    char choise;
+    int i, j, *random_move_ghost, ghost_number = 0 , *flag, temp, pill_number = 0, pac_man_flag = 1; // flag baraye in bekar rafe ke agar roohi roye ghors bere ghors az bey nare ve betoonim dobare baresh gardoonim
+    // baraye harkat rooh ha
     for(i = 0; i < information_game.line; i++){
         for(j = 0; j < information_game.column; j++){
             if(information_game.map[i][j] == GHOST){
@@ -21,6 +23,15 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
     for(temp = 0; temp < ghost_number; temp++){
         flag[temp] = 0;
     }
+
+    //baraye harkat pacman va pill ha
+    for(i = 0; i < information_game.line; i++){
+        for(j = 0; j < information_game.column; j++){
+            if(information_game.map[i][j] == PILL){
+                pill_number++;
+            }
+        }
+    }   
 
     while(1){
         system("cls || clear");
@@ -37,22 +48,22 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                     case GHOST_MOVED:
                     case GHOST:
                         information_game.map[i][j] = GHOST;
-                        printf("G");
+                        printf(MAGENTA"G"RESET);
                         break;
                     case EMPTY:
                         printf(" ");
                         break;
                     case VERTICAL_WALL:
-                        printf("|");
+                        printf(YELLOW"|"RESET);
                         break;
                     case HORIZONTAL_WALL:
-                        printf("-");
+                        printf(YELLOW"-"RESET);
                         break;
                     case PILL:
-                        printf("P");
+                        printf(RED"P"RESET);
                         break;
                     case PAC_MAN:
-                        printf("@");
+                        printf(GREEN"@"RESET);
                         break;
                     default:
                         system("cls || clear");
@@ -62,7 +73,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                 }
             }
         }
-        usleep(500000);
+        usleep(1000000);
         ghost_number = temp;
         for(i = 0; i < information_game.line; i++){
             for(j = 0; j < information_game.column; j++){
@@ -227,5 +238,142 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                 }
             }
         } 
+        for(i = 0; i < information_game.line && pac_man_flag; i++){
+            for(j = 0; j < information_game.column; j++){
+                if(information_game.map[i][j] == PAC_MAN){
+                    pac_man_flag = 0;
+                    break;
+                }
+            }
+        }
+        pac_man_flag = 1;
+        i--;
+        if(_kbhit()){
+            choise = getch();
+            if(choise == 's'){ //DOWN
+                switch(information_game.map[i+1][j]){
+                    case HORIZONTAL_WALL:
+                    case VERTICAL_WALL:
+                        break;
+                    case GHOST:
+                    case GHOST_MOVED:
+                        ptemp->level --;
+                        system("cls || clear");
+                        printf(RED"game over."RESET);  
+                        usleep(3000000);
+                        user_menu(ptemp, phead); 
+                        break;
+                    case EMPTY:
+                        information_game.map[i+1][j] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        break;
+                    case PILL:
+                        information_game.map[i+1][j] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        information_game.score ++;
+                        if(information_game.score == pill_number){
+                            ptemp->level += 3;
+                            system("cls || clear");
+                            printf(GREEN"game is win."RESET);  
+                            usleep(3000000);
+                            user_menu(ptemp, phead); 
+                        }
+                        break;
+                }
+            }
+            else if(choise == 'w'){ //UP
+                switch(information_game.map[i-1][j]){
+                    case HORIZONTAL_WALL:
+                    case VERTICAL_WALL:
+                        break;
+                    case GHOST:
+                    case GHOST_MOVED:
+                        ptemp->level --;
+                        system("cls || clear");
+                        printf(RED"game over."RESET);  
+                        usleep(3000000);
+                        user_menu(ptemp, phead); 
+                        break;
+                    case EMPTY:
+                        information_game.map[i-1][j] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        break;
+                    case PILL:
+                        information_game.map[i-1][j] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        information_game.score ++;
+                        if(information_game.score == pill_number){
+                            ptemp->level += 3;
+                            system("cls || clear");
+                            printf(GREEN"game is win."RESET);  
+                            usleep(3000000);
+                            user_menu(ptemp, phead); 
+                        }
+                        break;
+                }
+            }
+            else if(choise == 'a'){ //LEFT
+                switch(information_game.map[i][j-1]){
+                    case HORIZONTAL_WALL:
+                    case VERTICAL_WALL:
+                        break;
+                    case GHOST:
+                    case GHOST_MOVED:
+                        ptemp->level --;
+                        system("cls || clear");
+                        printf(RED"game over."RESET);  
+                        usleep(3000000);
+                        user_menu(ptemp, phead); 
+                        break;
+                    case EMPTY:
+                        information_game.map[i][j-1] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        break;
+                    case PILL:
+                        information_game.map[i][j-1] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        information_game.score ++;
+                        if(information_game.score == pill_number){
+                            ptemp->level += 3;
+                            system("cls || clear");
+                            printf(GREEN"game is win."RESET);  
+                            usleep(3000000);
+                            user_menu(ptemp, phead); 
+                        }
+                        break;
+                }
+            }
+            else if(choise == 'd'){ //RIGHT
+                switch(information_game.map[i][j+1]){
+                    case HORIZONTAL_WALL:
+                    case VERTICAL_WALL:
+                        break;
+                    case GHOST:
+                    case GHOST_MOVED:
+                        ptemp->level --;
+                        system("cls || clear");
+                        printf(RED"game over."RESET);  
+                        usleep(3000000);
+                        user_menu(ptemp, phead); 
+                        break;
+                    case EMPTY:
+                        information_game.map[i][j+1] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        break;
+                    case PILL:
+                        information_game.map[i][j+1] = PAC_MAN;
+                        information_game.map[i][j] = EMPTY;
+                        information_game.score ++;
+                        if(information_game.score == pill_number){
+                            ptemp->level += 3;
+                            system("cls || clear");
+                            printf(GREEN"game is win."RESET);  
+                            usleep(3000000);
+                            user_menu(ptemp, phead); 
+                        }
+                        break;
+                }
+            }
+        }
     }
 }

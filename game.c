@@ -13,7 +13,17 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
     int choise2;
     int i, j, *random_move_ghost, ghost_number = 0 , *flag, temp, pill_number = 0, pac_man_flag = 1; // flag baraye in bekar rafe ke agar roohi roye ghors bere ghors az bey nare ve betoonim dobare baresh gardoonim
     char file_name[200];
-    
+    char **map_print;
+    int i_print, j_print, line_print, column_print;
+
+    //sakht map bozorgtar baraye print map ziba tar va bozorgtar
+    line_print = information_game.line * 4;
+    column_print = information_game.column * 6;
+    map_print = (char**) malloc(line_print * sizeof(char*));
+    for(i_print = 0; i_print < line_print; i_print++){
+        map_print[i_print] = (char*) malloc(column_print * sizeof(char));
+    }
+     
     user_file = fopen("user.bin", "wb");
 
     // baraye harkat rooh ha
@@ -40,6 +50,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
     }   
 
     while(1){
+        //print etelaat karbar balaye safhe bazi
         system("cls || clear");
         printf(YELLOW"* * * * * * * * * * * * * * * * * * * *"RESET"\n");
         printf(YELLOW"          "MAGENTA"User information"RESET"           "RESET"\n\n");
@@ -47,29 +58,165 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
         printf("        "GREEN"User name > %s \n"RESET, ptemp->user_name);
         printf("       "GREEN"User level > %d \n"RESET, ptemp->level);
         printf("       "BLUE"User score > %d \n\n"RESET, information_game.score);
+
+        //print map bazi be soorat bozorgtar va taziin shode
         for(i = 0; i < information_game.line; i++){
-            printf("\n");
             for(j = 0; j < information_game.column; j++){
                 switch(information_game.map[i][j]){
                     case GHOST_MOVED:
                     case GHOST:
                         information_game.map[i][j] = GHOST;
-                        printf(MAGENTA"G"RESET);
+
+                        i_print = i * 4;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = '.';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '.';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+
+                        i_print++;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = '|';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = '0';
+                        j_print++;
+                        map_print[i_print][j_print] = '0';
+                        j_print++;
+                        map_print[i_print][j_print] = '|';
+
+                        i_print++;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = '|';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = '|';
+
+                        i_print++;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = '\'';
+                        j_print++;
+                        map_print[i_print][j_print] = '^';
+                        j_print++;
+                        map_print[i_print][j_print] = '^';
+                        j_print++;
+                        map_print[i_print][j_print] = '^';
+                        j_print++;
+                        map_print[i_print][j_print] = '^';
+                        j_print++;
+                        map_print[i_print][j_print] = '\'';
+
                         break;
                     case EMPTY:
-                        printf(" ");
+                        for(i_print = i * 4; i_print < i * 4 + 4; i_print++){
+                            for(j_print = j * 6; j_print < j * 6 + 6; j_print++){
+                                map_print[i_print][j_print] = ' ';
+                            }
+                        }
                         break;
                     case VERTICAL_WALL:
-                        printf(YELLOW"|"RESET);
-                        break;
                     case HORIZONTAL_WALL:
-                        printf(YELLOW"-"RESET);
+                        for(i_print = i * 4; i_print < i * 4 + 4; i_print++){
+                            for(j_print = j * 6; j_print < j * 6 + 6; j_print++){
+                                map_print[i_print][j_print] = '.';
+                            }
+                        }
                         break;
                     case PILL:
-                        printf(RED"P"RESET);
+                        for(i_print = i * 4; i_print < i * 4 + 4; i_print++){
+                            for(j_print = j * 6; j_print < j * 6 + 6; j_print++){
+                                map_print[i_print][j_print] = ' ';
+                            }
+                        }
+                        i_print = i * 4 + 1;
+                        j_print = j * 6 + 1;
+                        map_print[i_print][j_print] = '.';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '.';
+                        j_print = j * 6 + 1;
+                        i_print++;
+                        map_print[i_print][j_print] = '\'';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '\'';
                         break;
                     case PAC_MAN:
-                        printf(GREEN"@"RESET);
+                        i_print = i * 4;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = '.';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '.';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+
+                        i_print++;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = '/';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = '_';
+                        j_print++;
+                        map_print[i_print][j_print] = '.';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '\'';
+
+                        i_print++;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = '\\';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = '\'';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '.';
+
+                        i_print++;
+                        j_print = j * 6;
+                        map_print[i_print][j_print] = ' ';
+                        j_print++;
+                        map_print[i_print][j_print] = '\'';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '-';
+                        j_print++;
+                        map_print[i_print][j_print] = '\'';
+                        j_print++;
+                        map_print[i_print][j_print] = ' ';
+
                         break;
                     default:
                         system("cls || clear");
@@ -79,8 +226,18 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                 }
             }
         }
+
+        for(i_print = 0; i_print < line_print; i_print++){
+            printf("\n");
+            for(j_print = 0; j_print < column_print; j_print++){
+                printf("%c", map_print[i_print][j_print]);
+            }
+        }
         printf(BLUE"\n\nClick the Escape button to exit.");
-        usleep(100000);
+        usleep(500000);
+
+
+        //mantegh bazi va anjam hame harkat ha
         ghost_number = temp;
         for(i = 0; i < information_game.line; i++){
             for(j = 0; j < information_game.column; j++){

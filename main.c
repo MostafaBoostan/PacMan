@@ -47,7 +47,7 @@ struct user* load_user(){
 //neshun dadan menu avalie baraye vorod va sapt nam va edame barname
 void first_menu(struct user* phead){
     struct user *ptemp;
-    int choise;
+    char choise;
     system("cls || clear");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(YELLOW"*"RESET"   "MAGENTA"Welcome to pac man game"RESET"   "YELLOW"*"RESET"\n");
@@ -58,33 +58,31 @@ void first_menu(struct user* phead){
     printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your choise: "RESET);
-    scanf("%d",& choise);
-    switch(choise){
-        case 1:
+    while(1){
+        choise = getch() - '0';
+        if(choise == 1){
             sign_in(phead);
             break;
-        case 2:
+        }
+        else if(choise == 2){
             phead = sign_up(phead);
             for(ptemp = phead; ptemp->pnext != NULL; ptemp = ptemp->pnext);
             user_menu(ptemp, phead);
             break;
-        case 3:
+        }
+        else if(choise == 3){
             exit(0);
             break;
-        default:
-            system("cls || clear");
-            printf("\n"RED"The entered number is not valid. Please enter one of the options correctly."RESET);
-            usleep(3000000);
-            first_menu(phead);
+        }
     }
 }
 
 //register kardan dar game
 struct user* sign_up(struct user *phead){
     FILE *user_file;
-    char user_name[200], password[200];
+    char user_name[200], password[200], choise;
     struct user *ptemp, *pnew;
-    int choise, user_id = 2;
+    int  user_id = 2;
 
     //kamel kardan user name
     system("cls || clear");
@@ -133,10 +131,9 @@ struct user* sign_up(struct user *phead){
     printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your password: "RESET);
-    scanf("%d",& choise);
-
-    switch(choise){
-        case 1:
+    while(1){
+        choise = getch() - '0';
+        if(choise == 1){
             user_file = fopen("user.bin", "wb");
             pnew = (struct user*) malloc(sizeof(struct user));
             strcpy(pnew->user_name, user_name);
@@ -168,21 +165,14 @@ struct user* sign_up(struct user *phead){
             system("cls || clear");
             printf("\n"GREEN"Your registration was successful."RESET);
             usleep(3000000);
-
-
             return phead;
             break;
-        case 2:
+        }
+        else if(choise == 2){
             first_menu(phead);
             break;
-        default:
-            system("cls || clear");
-            printf("\n"RED"The entered number is not valid. Please enter one of the options correctly."RESET);
-            usleep(3000000);
-            first_menu(phead);
+        }
     }
-
-
 }
 
 //sing in kardan dar game
@@ -234,7 +224,7 @@ void sign_in(struct user *phead){
 
 //menu user ghabl az shoro bazi
 void user_menu(struct user* ptemp, struct user* phead){
-    int choise;
+    char choise;
     system("cls || clear");
     printf(YELLOW"* * * * * * * * * * * * * * * * * * * *"RESET"\n");
     printf(YELLOW"          "MAGENTA"User information"RESET"           "RESET"\n\n");
@@ -253,14 +243,14 @@ void user_menu(struct user* ptemp, struct user* phead){
     printf("       "RED"Delete account (4\n"RESET);
     printf(YELLOW"* * * * * * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your password: "RESET);
-    scanf("%d",& choise);
-
-    switch(choise){
-        case 1:
+    while(1){
+        choise = getch() - '0';
+        if(choise == 1){
             ptemp->last_game = 0;
             load_map_new(ptemp, phead);
             break;
-        case 2:
+        }
+        else if(choise == 2){
             if(ptemp->last_game == 0){
                 system("cls || clear");
                 printf("\n"RED"You have no unfinished game."RESET);
@@ -269,21 +259,18 @@ void user_menu(struct user* ptemp, struct user* phead){
             }
             load_map_restore(ptemp, phead);
             break;
-        case 3:
+        }
+        else if(choise == 3){
             system("cls || clear");
             printf("\n"GREEN"You are logged out."RESET);
             usleep(3000000);
             first_menu(phead);
             break;
-        case 4:
+        }
+        else if(choise == 4){
             delete_acc(ptemp, phead);
             break;
-        default:
-            system("cls || clear");
-            printf("\n"RED"The entered number is not valid. Please enter one of the options correctly."RESET);
-            usleep(3000000);
-            user_menu(ptemp, phead);
-
+        }
     }
     
 }
@@ -321,7 +308,8 @@ void delete_acc(struct user* pdelete, struct user* phead){
 //load kardan map baraye new game
 void load_map_new(struct user* ptemp, struct user* phead){
     struct game new_game;
-    int choise, i, j;
+    int i, j;
+    char choise;
     FILE *map_file;
     system("cls || clear");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
@@ -334,25 +322,24 @@ void load_map_new(struct user* ptemp, struct user* phead){
     printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your choise: "RESET);
-    scanf("%d",& choise);
-    switch(choise){
-        case 1:
+    while(1){
+        choise = getch() - '0';
+        if(choise == 1){
             map_file = fopen("PAC-MAN-MAPS\\mapA.txt", "r");
             break;
-        case 2:
-            map_file = fopen("PAC-MAN-MAPS\\mapB.txt", "r");
+        }
+        else if(choise == 2){
+             map_file = fopen("PAC-MAN-MAPS\\mapB.txt", "r");
             break;
-        case 3:
+        }
+        else if(choise == 3){
             map_file = fopen("PAC-MAN-MAPS\\mapC.txt", "r");
             break;
-        case 4:
+        }
+        else if(choise == 4){
             user_menu(ptemp, phead);
             break;
-        default:
-            system("cls || clear");
-            printf("\n"RED"The entered number is not valid. Please enter one of the options correctly."RESET);
-            usleep(3000000);
-            load_map_new(ptemp, phead);
+        }
     }
     new_game.user_id = ptemp->user_id;
     new_game.score = 0;

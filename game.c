@@ -9,8 +9,7 @@
 void start_game(struct user* ptemp, struct user* phead, struct game information_game){
     struct user* ptemp_write;
     FILE *map_file, *user_file;
-    char choise;
-    int choise2;
+    char choise, choise2;
     int i, j, *random_move_ghost, ghost_number = 0 , *flag, temp, pill_number = 0, pac_man_flag = 1; // flag baraye in bekar rafe ke agar roohi roye ghors bere ghors az bey nare ve betoonim dobare baresh gardoonim
     char file_name[200];
     char **map_print;
@@ -234,194 +233,10 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
             }
         }
         printf(BLUE"\n\nClick the Escape button to exit.");
-        usleep(500000);
+        usleep(200000);
 
 
         //mantegh bazi va anjam hame harkat ha
-        ghost_number = temp;
-        for(i = 0; i < information_game.line; i++){
-            for(j = 0; j < information_game.column; j++){
-                if(information_game.map[i][j] == GHOST){
-                    random_move_ghost[ghost_number] = rand() % 4;
-                    switch(random_move_ghost[ghost_number]){
-                        case UP:
-                            switch(information_game.map[i-1][j]){
-                                case GHOST:
-                                case GHOST_MOVED:
-                                case HORIZONTAL_WALL:
-                                case VERTICAL_WALL:
-                                    break;
-                                case PAC_MAN:
-                                    ptemp->level --;
-                                    ptemp->last_game = 0;
-                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
-                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
-                                    }
-                                    fclose(user_file);
-                                    system("cls || clear");
-                                    printf(RED"game over."RESET);  
-                                    usleep(3000000);
-                                    free(random_move_ghost);
-                                    free(flag);
-                                    user_menu(ptemp, phead);   
-                                case EMPTY:
-                                    information_game.map[i-1][j] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 0;
-                                    break;
-                                case PILL:
-                                    information_game.map[i-1][j] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 1;
-                                    break;                      
-                            }
-                            break;
-                        case DOWN:
-                            switch(information_game.map[i+1][j]){
-                                case GHOST:
-                                case GHOST_MOVED:
-                                case HORIZONTAL_WALL:
-                                case VERTICAL_WALL:
-                                    break;
-                                case PAC_MAN:
-                                    ptemp->level --;
-                                    ptemp->last_game = 0;
-                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
-                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
-                                    }
-                                    fclose(user_file);
-                                    system("cls || clear");
-                                    printf(RED"game over."RESET);  
-                                    usleep(3000000);
-                                    free(random_move_ghost);
-                                    free(flag);
-                                    user_menu(ptemp, phead);   
-                                case EMPTY:
-                                    information_game.map[i+1][j] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 0;
-                                    break;
-                                case PILL:
-                                    information_game.map[i+1][j] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 1;
-                                    break;                      
-                            }
-                            break;
-                        case LEFT:
-                            switch(information_game.map[i][j-1]){
-                                case GHOST:
-                                case GHOST_MOVED:
-                                case HORIZONTAL_WALL:
-                                case VERTICAL_WALL:
-                                    break;
-                                case PAC_MAN:
-                                    ptemp->level --;
-                                    ptemp->last_game = 0;
-                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
-                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
-                                    }
-                                    fclose(user_file);
-                                    system("cls || clear");
-                                    printf(RED"game over."RESET);  
-                                    usleep(3000000);
-                                    free(random_move_ghost);
-                                    free(flag);
-                                    user_menu(ptemp, phead);   
-                                case EMPTY:
-                                    information_game.map[i][j-1] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 0;
-                                    break;
-                                case PILL:
-                                    information_game.map[i][j-1] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 1;
-                                    break;                      
-                            }
-                            break;
-                        case RHITE:
-                            switch(information_game.map[i][j+1]){
-                                case GHOST:
-                                case GHOST_MOVED:
-                                case HORIZONTAL_WALL:
-                                case VERTICAL_WALL:
-                                    break;
-                                case PAC_MAN:
-                                    ptemp->level --;
-                                    ptemp->last_game = 0;
-                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
-                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
-                                    }
-                                    fclose(user_file);
-                                    system("cls || clear");
-                                    printf(RED"game over."RESET);  
-                                    usleep(3000000);
-                                    free(random_move_ghost);
-                                    free(flag);
-                                    user_menu(ptemp, phead);   
-                                case EMPTY:
-                                    information_game.map[i][j+1] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 0;
-                                    break;
-                                case PILL:
-                                    information_game.map[i][j+1] = GHOST_MOVED;
-                                    if(flag[ghost_number] == 1){
-                                        information_game.map[i][j] = PILL;
-                                    } 
-                                    else{
-                                        information_game.map[i][j] = EMPTY;
-                                    }    
-                                    flag[ghost_number] = 1;
-                                    break;                      
-                            }
-                            break;
-                        default:
-                            system("cls || clear");
-                            printf(RED"The map has not been loaded successfully."RESET);
-                            usleep(3000000);
-
-                    }
-                    ghost_number --;
-                }
-            }
-        } 
         for(i = 0; i < information_game.line && pac_man_flag; i++){
             for(j = 0; j < information_game.column; j++){
                 if(information_game.map[i][j] == PAC_MAN){
@@ -606,15 +421,14 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                 printf(MAGENTA"Would you like to save your map and continue the current game in the future?"RESET"\n");
                 printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
                 printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
-                printf(YELLOW"*"RESET"              "GREEN"Yes (1"RESET"         "YELLOW"*"RESET"\n");
-                printf(YELLOW"*"RESET"               "GREEN"No (2"RESET"         "YELLOW"*"RESET"\n");
+                printf(YELLOW"*"RESET"            "GREEN"Yes (1"RESET"           "YELLOW"*"RESET"\n");
+                printf(YELLOW"*"RESET"             "GREEN"No (2"RESET"           "YELLOW"*"RESET"\n");
                 printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
                 printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
                 printf(BLUE"Please enter your choise: "RESET);
-                scanf("%d",& choise2);
-                
-                switch(choise2){
-                    case 1:
+                while(1){
+                    choise2 = getch() - '0';
+                    if(choise2 == 1){
                         //tolid esm file
                         strcpy(file_name, ptemp->user_name);
                         strcat(file_name, ".txt");
@@ -639,7 +453,8 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                         usleep(3000000);
                         user_menu(ptemp, phead);
                         break;
-                    case 2:
+                    }
+                    else if(choise2 == 2){
                         ptemp->last_game = 0;
                         for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
                             fwrite(ptemp_write, sizeof(struct user), 1, user_file);
@@ -647,12 +462,195 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                         fclose(user_file);
                         user_menu(ptemp, phead);
                         break;
-                    default:
-                        system("cls || clear");
-                        printf("\n"RED"The entered number is not valid. Please enter one of the options correctly."RESET);
-                        usleep(3000000);
+                    }
                 }
             }
         }
+
+        ghost_number = temp;
+        for(i = 0; i < information_game.line; i++){
+            for(j = 0; j < information_game.column; j++){
+                if(information_game.map[i][j] == GHOST){
+                    random_move_ghost[ghost_number] = rand() % 4;
+                    switch(random_move_ghost[ghost_number]){
+                        case UP:
+                            switch(information_game.map[i-1][j]){
+                                case GHOST:
+                                case GHOST_MOVED:
+                                case HORIZONTAL_WALL:
+                                case VERTICAL_WALL:
+                                    break;
+                                case PAC_MAN:
+                                    ptemp->level --;
+                                    ptemp->last_game = 0;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
+                                    system("cls || clear");
+                                    printf(RED"game over."RESET);  
+                                    usleep(3000000);
+                                    free(random_move_ghost);
+                                    free(flag);
+                                    user_menu(ptemp, phead);   
+                                case EMPTY:
+                                    information_game.map[i-1][j] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 0;
+                                    break;
+                                case PILL:
+                                    information_game.map[i-1][j] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 1;
+                                    break;                      
+                            }
+                            break;
+                        case DOWN:
+                            switch(information_game.map[i+1][j]){
+                                case GHOST:
+                                case GHOST_MOVED:
+                                case HORIZONTAL_WALL:
+                                case VERTICAL_WALL:
+                                    break;
+                                case PAC_MAN:
+                                    ptemp->level --;
+                                    ptemp->last_game = 0;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
+                                    system("cls || clear");
+                                    printf(RED"game over."RESET);  
+                                    usleep(3000000);
+                                    free(random_move_ghost);
+                                    free(flag);
+                                    user_menu(ptemp, phead);   
+                                case EMPTY:
+                                    information_game.map[i+1][j] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 0;
+                                    break;
+                                case PILL:
+                                    information_game.map[i+1][j] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 1;
+                                    break;                      
+                            }
+                            break;
+                        case LEFT:
+                            switch(information_game.map[i][j-1]){
+                                case GHOST:
+                                case GHOST_MOVED:
+                                case HORIZONTAL_WALL:
+                                case VERTICAL_WALL:
+                                    break;
+                                case PAC_MAN:
+                                    ptemp->level --;
+                                    ptemp->last_game = 0;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
+                                    system("cls || clear");
+                                    printf(RED"game over."RESET);  
+                                    usleep(3000000);
+                                    free(random_move_ghost);
+                                    free(flag);
+                                    user_menu(ptemp, phead);   
+                                case EMPTY:
+                                    information_game.map[i][j-1] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 0;
+                                    break;
+                                case PILL:
+                                    information_game.map[i][j-1] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 1;
+                                    break;                      
+                            }
+                            break;
+                        case RHITE:
+                            switch(information_game.map[i][j+1]){
+                                case GHOST:
+                                case GHOST_MOVED:
+                                case HORIZONTAL_WALL:
+                                case VERTICAL_WALL:
+                                    break;
+                                case PAC_MAN:
+                                    ptemp->level --;
+                                    ptemp->last_game = 0;
+                                    for(ptemp_write = phead; ptemp_write != NULL ; ptemp_write = ptemp_write->pnext){
+                                        fwrite(ptemp_write, sizeof(struct user), 1, user_file);
+                                    }
+                                    fclose(user_file);
+                                    system("cls || clear");
+                                    printf(RED"game over."RESET);  
+                                    usleep(3000000);
+                                    free(random_move_ghost);
+                                    free(flag);
+                                    user_menu(ptemp, phead);   
+                                case EMPTY:
+                                    information_game.map[i][j+1] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 0;
+                                    break;
+                                case PILL:
+                                    information_game.map[i][j+1] = GHOST_MOVED;
+                                    if(flag[ghost_number] == 1){
+                                        information_game.map[i][j] = PILL;
+                                    } 
+                                    else{
+                                        information_game.map[i][j] = EMPTY;
+                                    }    
+                                    flag[ghost_number] = 1;
+                                    break;                      
+                            }
+                            break;
+                        default:
+                            system("cls || clear");
+                            printf(RED"The map has not been loaded successfully."RESET);
+                            usleep(3000000);
+
+                    }
+                    ghost_number --;
+                }
+            }
+        } 
+
     }
 }

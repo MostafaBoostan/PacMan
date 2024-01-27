@@ -47,6 +47,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
             }
         }
     }   
+    pill_number += information_game.score;
 
     while(1){
         //print etelaat karbar balaye safhe bazi
@@ -233,7 +234,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
             }
         }
         printf(BLUE"\n\nClick the Escape button to exit.");
-        usleep(200000);
+        usleep(500000);
 
 
         //mantegh bazi va anjam hame harkat ha

@@ -94,7 +94,7 @@ struct user* sign_up(struct user *phead){
     printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your user name: "RESET);
-    scanf("%s", user_name);
+    gets(user_name);
 
     //shart tekrari naboodan user name
     for(ptemp = phead; ptemp != NULL; ptemp = ptemp->pnext){
@@ -119,7 +119,7 @@ struct user* sign_up(struct user *phead){
     printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your password: "RESET);
-    scanf("%s", password);
+    gets(password);
 
     //entekhab gozine
     system("cls || clear");
@@ -190,7 +190,7 @@ void sign_in(struct user *phead){
     printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your user name: "RESET);
-    scanf("%s", user_name);
+    gets(user_name);
 
     //kamel kardan password
     system("cls || clear");
@@ -202,7 +202,7 @@ void sign_in(struct user *phead){
     printf(YELLOW"*"RESET"                             "YELLOW"*"RESET"\n");
     printf(YELLOW"* * * * * * * * * * * * * * * *"RESET"\n");
     printf(BLUE"Please enter your password: "RESET);
-    scanf("%s", password);
+    gets(password);
 
     for(ptemp = phead; ptemp != NULL; ptemp = ptemp->pnext){
         if(strcmp(ptemp->user_name, user_name) == 0){

@@ -286,7 +286,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                 }
                                 fclose(user_file);
                                 system("cls || clear");
-                                printf(GREEN"game is win."RESET);  
+                                printf(GREEN"you win."RESET);  
                                 usleep(3000000);
                                 user_menu(ptemp, phead); 
                             }
@@ -327,7 +327,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                 }
                                 fclose(user_file);
                                 system("cls || clear");
-                                printf(GREEN"game is win."RESET);  
+                                printf(GREEN"you win."RESET);  
                                 usleep(3000000);
                                 user_menu(ptemp, phead); 
                             }
@@ -368,7 +368,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                 }
                                 fclose(user_file);
                                 system("cls || clear");
-                                printf(GREEN"game is win."RESET);  
+                                printf(GREEN"you win."RESET);  
                                 usleep(3000000);
                                 user_menu(ptemp, phead); 
                             }
@@ -409,7 +409,7 @@ void start_game(struct user* ptemp, struct user* phead, struct game information_
                                 }
                                 fclose(user_file);
                                 system("cls || clear");
-                                printf(GREEN"game is win."RESET);  
+                                printf(GREEN"you win."RESET);  
                                 usleep(3000000);
                                 user_menu(ptemp, phead); 
                             }

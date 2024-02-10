@@ -29,6 +29,10 @@ struct user* load_user(){
         return NULL;
     }
     pnew = (struct user*) malloc(sizeof(struct user));
+    if(fread(pnew, sizeof(struct user), 1, user_file) <= 0){
+        return NULL;
+    }
+    fseek(user_file, 0, SEEK_SET);
     while(fread(pnew, sizeof(struct user), 1, user_file) > 0){
         pnew->pnext = NULL;
         if(phead == NULL){
